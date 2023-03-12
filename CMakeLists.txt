@@ -5,6 +5,7 @@ project(cpp-in-a-week)
 # Set C++ standard to C++17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/out)
 
 file(GLOB_RECURSE sources      src/main/*.cpp src/main/*.h)
 file(GLOB_RECURSE sources_test src/test/*.cpp)
@@ -43,30 +44,31 @@ file(COPY ${data} DESTINATION resources)
 # we don't add REQUIRED because it's just for testing.
 # People who might want to build the project to use it should not be required
 # to install testing dependencies.
-find_package(GTest)
+#find_package(GTest)
+include(FetchContent)
+FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/5376968f6948923e2411081fd9372e71a59d8e77.zip
+    DOWNLOAD_EXTRACT_TIMESTAMP ${PROJECT_BINARY_DIR}/googletest-download-timestamp
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
 
-if(GTEST_FOUND)
-    add_executable(unit_tests ${sources_test} ${sources})
+add_executable(unit_tests ${sources_test})
 
-    # This define is added to prevent collision with the main.
-    # It might be better solved by not adding the source with the main to the
-    # testing target.
-    target_compile_definitions(unit_tests PUBLIC UNIT_TESTS)
+# This define is added to prevent collision with the main.
+# It might be better solved by not adding the source with the main to the
+# testing target.
+target_compile_definitions(unit_tests PUBLIC UNIT_TESTS)
 
-    # This allows us to use the executable as a link library, and inherit all
-    # linker options and library dependencies from it, by simply adding it as dependency.
-    set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS on)
+target_link_libraries(unit_tests PRIVATE gtest_main)
+target_link_libraries(unit_tests PRIVATE ${sources})
 
-    target_link_libraries(unit_tests PUBLIC
-        ${GTEST_BOTH_LIBRARIES}
-        ${PROJECT_NAME}
-        )
-
-    target_include_directories(unit_tests PUBLIC
-        ${GTEST_INCLUDE_DIRS} # doesn't do anything on linux
-        )
-
-endif()
+# This is the magic that makes the testing framework work.
+# It basically adds a custom command that runs the tests after the build.
+include(GoogleTest)
+gtest_discover_tests(unit_tests)
 
 
 ###############################################################################

@@ -6,52 +6,47 @@
 #include <iostream>
 #include <vector>
 
+using namespace std;
+
 void test_const_pointer() {
-    std::vector<int> vec;
+    vector<int> vec;
     for (int i = 0; i < 10; i++) {
         vec.push_back(i);
     }
 
-    try {
-        const std::vector<int>::iterator iter = vec.begin();
+    auto iter = vec.begin();
 
-        std::cout << "changing 0th element to 100" << std::endl;
-        *iter = 100;
-        std::cout << "the 0th element is changed to 100" << std::endl;
+    cout << "changing 0th element to 100" << endl;
+    *iter = 100;
+    cout << "the 0th element is changed to 100" << endl;
 
-        std::cout << "incrementing iterator" << std::endl;
-        iter++;
-        std::cout << "iterator incremented" << std::endl;
-    } catch (std::out_of_range &e) {
-        std::cout << e.what() << std::endl;
-    } catch (std::exception &e) {
-        std::cout << e.what() << std::endl;
-    } catch (...) {
-        std::cout << "unknown exception" << std::endl;
-    }
+    cout << "incrementing iterator" << endl;
+    iter++;
+    cout << "iterator incremented" << endl;
+
 }
 
 void test_const_iterator() {
-    std::vector<int> vec;
+    vector<int> vec;
     for (int i = 0; i < 10; i++) {
         vec.push_back(i);
     }
 
     try {
-        const std::vector<int>::const_iterator iter = vec.begin();
+        vector<int>::const_iterator iter = vec.begin();
 
-        std::cout << "incrementing iterator" << std::endl;
+        cout << "incrementing iterator" << endl;
         ++iter;
-        std::cout << "iterator incremented" << std::endl;
+        cout << "iterator incremented" << endl;
 
-        std::cout << "changing 0th element to 100" << std::endl;
-        *iter = 100;
-        std::cout << "the 0th element is changed to 100" << std::endl;
-    } catch (std::out_of_range &e) {
-        std::cout << e.what() << std::endl;
-    } catch (std::exception &e) {
-        std::cout << e.what() << std::endl;
+        cout << "changing 0th element to 100" << endl;
+//        *iter = 100;
+        cout << "the 1st element is changed to 100" << endl;
+    } catch (out_of_range &e) {
+        cout << e.what() << endl;
+    } catch (exception &e) {
+        cout << e.what() << endl;
     } catch (...) {
-        std::cout << "unknown exception" << std::endl;
+        cout << "unknown exception" << endl;
     }
 }
