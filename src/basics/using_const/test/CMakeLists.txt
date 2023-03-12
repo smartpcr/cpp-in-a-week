@@ -1,6 +1,6 @@
 set(TEST_FILES test_textblock.cpp)
 
-include(${CMAKE_SOURCE_DIR}/gtest.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/gtest.cmake)
 
 add_executable(test_text_block ${TEST_FILES})
 

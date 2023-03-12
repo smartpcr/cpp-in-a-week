@@ -1,6 +1,6 @@
 set(TEST_FILES test_const_pointer.cpp)
 
-include(${CMAKE_SOURCE_DIR}/gtest.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/gtest.cmake)
 
 add_executable(test_const_pointer ${TEST_FILES})
 
