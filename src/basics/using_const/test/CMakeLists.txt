@@ -1,15 +1,6 @@
 set(TEST_FILES test_textblock.cpp)
 
-include(FetchContent)
-FetchContent_Declare(
-    googletest
-    # Specify the commit you depend on and update it regularly.
-    URL https://github.com/google/googletest/archive/5376968f6948923e2411081fd9372e71a59d8e77.zip
-    DOWNLOAD_EXTRACT_TIMESTAMP ${PROJECT_BINARY_DIR}/googletest-download-timestamp
-)
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
+include(${CMAKE_SOURCE_DIR}/gtest.cmake)
 
 add_executable(test_text_block ${TEST_FILES})
 
